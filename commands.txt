@@ -1,0 +1,28 @@
+docker search elasticsearch
+docker pull docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+docker run -d --name es -p 9200:9200 -p 9300:9300 -e "discovery.type-single-node" docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+docker container logs es
+curl 0.0.0.0:9200
+docker build -t alexanderbdewhirst/foodtrucks-web .
+docker network ls
+docker run -it --rm alexanderbdewhirst/foodtrucks-web bash
+# curl 172.17.0.2:9200
+docker network create foodtrucks-net
+docker container stop es
+docker container rm es
+docker run -d --name es --net foodtrucks-net -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+docker network inspect foodtrucks-net
+docker run -it --rm --net foodtrucks-net alexanderbdewhirst/foodtrucks-web bash
+# curl es:9200
+docker run -d --net foodtrucks-net -p 5000:5000 --name foodtrucks-web alexanderbdewhirst/foodtrucks-web
+docker container ls
+curl -I 0.0.0.0:5000
+docker stop es foodtrcuks-web
+docker rm es foodtrucks-web
+docker-compose up -d
+docker-compose ps
+docker-compose down -v
+docker network rm foodtrucks-net
+docker compose up -d
+docker network ls
+docker network inspect foodtrucks_default
